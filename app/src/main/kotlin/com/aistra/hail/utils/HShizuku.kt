@@ -182,12 +182,20 @@ object HShizuku {
         )
 
     private val suspendDialogInfo: Any
-        @RequiresApi(Build.VERSION_CODES.Q) @SuppressLint("PrivateApi") get() = HiddenApiBypass.newInstance(
-            Class.forName("android.content.pm.SuspendDialogInfo\$Builder")
-        ).let {
-            HiddenApiBypass.invoke(it::class.java, it, "setNeutralButtonAction", 1 /*BUTTON_ACTION_UNSUSPEND*/)
-            HiddenApiBypass.invoke(it::class.java, it, "build")
-        }
+    @RequiresApi(Build.VERSION_CODES.Q) @SuppressLint("PrivateApi") get() = HiddenApiBypass.newInstance(
+        Class.forName("android.content.pm.SuspendDialogInfo\$Builder")
+    ).let {
+        // --- INÍCIO DA ALTERAÇÃO ---
+        // Define a mensagem personalizada
+        HiddenApiBypass.invoke(it::class.java, it, "setMessage", "Bloqueado pelo Time Lord!")
+        
+        // Opcional: Define um ícone de alerta (pode usar um recurso do sistema ou do próprio app)
+        // HiddenApiBypass.invoke(it::class.java, it, "setIcon", R.mipmap.ic_launcher) 
+        // --- FIM DA ALTERAÇÃO ---
+
+        HiddenApiBypass.invoke(it::class.java, it, "setNeutralButtonAction", 1 /*BUTTON_ACTION_UNSUSPEND*/)
+        HiddenApiBypass.invoke(it::class.java, it, "build")
+    }
 
     @RequiresApi(Build.VERSION_CODES.P)
     fun setAppRestricted(packageName: String, restricted: Boolean): Boolean = runCatching {
